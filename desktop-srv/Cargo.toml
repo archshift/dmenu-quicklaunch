@@ -1,0 +1,10 @@
+[package]
+name = "desktop-srv"
+version = "0.1.0"
+authors = ["Gui Andrade <gh@archshift.com>"]
+
+[dependencies]
+notify = "4.0"
+xdg = "2.1"
+regex = "1.0"
+lazy_static = "1.1"

@@ -1,0 +1,7 @@
+[package]
+name = "dmenu-quicklaunch"
+version = "0.1.0"
+authors = ["Gui Andrade <gh@archshift.com>"]
+
+[dependencies]
+xdg = "2.1"
