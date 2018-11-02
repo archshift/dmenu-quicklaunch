@@ -49,19 +49,19 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "desktop-srv"
+name = "dmenu-quicklaunch"
+version = "0.1.0"
+dependencies = [
+ "xdg 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "dmenu-quicklaunch-srv"
 version = "0.1.0"
 dependencies = [
  "lazy_static 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "notify 4.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "xdg 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "dmenu-quicklaunch"
-version = "0.1.0"
-dependencies = [
  "xdg 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

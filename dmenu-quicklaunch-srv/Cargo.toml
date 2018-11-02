@@ -1,5 +1,5 @@
 [package]
-name = "desktop-srv"
+name = "dmenu-quicklaunch-srv"
 version = "0.1.0"
 authors = ["Gui Andrade <gh@archshift.com>"]
 

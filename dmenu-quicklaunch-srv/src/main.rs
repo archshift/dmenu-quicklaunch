@@ -25,7 +25,9 @@ fn watch_dirs(dirs: &Vec<PathBuf>) -> notify::Result<mpsc::Receiver<FsEvent>> {
     let mut watcher = notify::watcher(tx, Duration::from_secs(10))?;
 
     for dir in dirs {
-        watcher.watch(dir, RecursiveMode::Recursive)?;
+        if let Err(x) = watcher.watch(dir, RecursiveMode::Recursive) {
+            eprintln!("Could not watch {:?}: {:?}", dir, x);
+        }
     }
 
     Ok(rx)

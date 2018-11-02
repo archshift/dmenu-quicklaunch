@@ -1,0 +1,8 @@
+[Unit]
+Description=Dmenu Desktop Launcher Server
+
+[Service]
+ExecStart=/usr/bin/env dmenu-quicklaunch-srv
+
+[Install]
+WantedBy=default.target
