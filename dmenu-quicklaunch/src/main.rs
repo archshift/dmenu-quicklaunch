@@ -4,11 +4,11 @@ use std::process::{Command, Stdio};
 use std::fs;
 use std::env;
 use std::io::Write;
-use std::collections::HashMap;
+use std::collections::BTreeMap as Map;
 
 use xdg::BaseDirectories;
 
-fn get_entries() -> HashMap<String, String> {
+fn get_entries() -> Map<String, String> {
     let xdg_dirs = BaseDirectories::new()
         .expect("Could not use XDG CONFIG cache directory!");
     let desktop_list = xdg_dirs.place_cache_file("xdg-desktop-list")
@@ -30,7 +30,7 @@ fn get_entries() -> HashMap<String, String> {
         .collect()
 }
 
-fn dmenu_choose(all_entries: &HashMap<String, String>) -> Option<&String> {
+fn dmenu_choose(all_entries: &Map<String, String>) -> Option<&String> {
     let dmenu_cmd = env::var("DMENU")
         .unwrap_or("dmenu".into());
     let mut dmenu_it = dmenu_cmd.split(' ');
