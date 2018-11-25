@@ -12,6 +12,7 @@ use std::io::{BufReader, BufRead, Result as IoResult, Seek, SeekFrom, Write};
 use lazy_static::lazy_static;
 use notify::{Watcher, RecursiveMode};
 use notify::DebouncedEvent as FsEvent;
+use notify::RecommendedWatcher as WatcherTy;
 use regex::Regex;
 use xdg::BaseDirectories;
 
@@ -19,18 +20,19 @@ lazy_static! {
     static ref DSK_NAME: Regex = Regex::new(r"^Name ?= ?(.*)$").unwrap();
 }
 
-fn watch_dirs(dirs: &Vec<PathBuf>) -> notify::Result<mpsc::Receiver<FsEvent>> {
+fn watch_dirs(dirs: &Vec<PathBuf>) -> notify::Result<(WatcherTy, mpsc::Receiver<FsEvent>)> {
     let (tx, rx) = mpsc::channel();
 
-    let mut watcher = notify::watcher(tx, Duration::from_secs(10))?;
+    let mut watcher = notify::watcher(tx, Duration::from_secs(2))?;
 
     for dir in dirs {
+        eprintln!("Watching {:?}", dir);
         if let Err(x) = watcher.watch(dir, RecursiveMode::Recursive) {
             eprintln!("Could not watch {:?}: {:?}", dir, x);
         }
     }
 
-    Ok(rx)
+    Ok((watcher, rx))
 }
 
 fn read_desktop_entry(file: PathBuf) -> Option<String> {
@@ -107,16 +109,11 @@ fn main() {
     io_ctx.write_desktop_list()
         .unwrap_or_else(|err| eprintln!("{:?}", err));
     
-    let fs_events = watch_dirs(&io_ctx.dsk_dirs)
+    let (_watcher, fs_events) = watch_dirs(&io_ctx.dsk_dirs)
         .expect("Could not watch desktop file directories!");
 
-    while let Ok(event) = fs_events.recv() {
-        match event {
-            FsEvent::Error(..) | FsEvent::Chmod(..) => {}
-            _ => {
-                io_ctx.write_desktop_list()
-                    .unwrap_or_else(|err| eprintln!("{:?}", err))
-            }
-        }
+    while let Ok(_event) = fs_events.recv() {
+        io_ctx.write_desktop_list()
+            .unwrap_or_else(|err| eprintln!("{:?}", err))
     }
 }
